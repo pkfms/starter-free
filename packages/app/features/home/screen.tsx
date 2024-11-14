@@ -1,19 +1,15 @@
 import {
+  AlertDialog,
   Anchor,
   Button,
-  H1,
   Paragraph,
-  Separator,
   Sheet,
   useToastController,
-  SwitchThemeButton,
-  SwitchRouterButton,
   XStack,
   YStack,
 } from '@my/ui'
-import { ChevronDown, ChevronUp, X } from '@tamagui/lucide-icons'
+import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import { useState } from 'react'
-import { Platform } from 'react-native'
 import { useLink } from 'solito/navigation'
 
 export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
@@ -23,54 +19,57 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
   })
 
   return (
-    <YStack
-      f={1}
-      jc="center"
-      ai="center"
-      gap="$8"
-      p="$4"
-      bg="$background"
-    >
-      <XStack
-        pos="absolute"
-        w="100%"
-        t="$6"
-        gap="$6"
-        jc="center"
-        fw="wrap"
-        $sm={{ pos: 'relative', t: 0 }}
-      >
-        {Platform.OS === 'web' && (
-          <>
-            <SwitchRouterButton pagesMode={pagesMode} />
-            <SwitchThemeButton />
-          </>
-        )}
-      </XStack>
+    <YStack>
+      <AlertDialog modal>
+        <AlertDialog.Trigger asChild>
+          <Button>Show Alert</Button>
+        </AlertDialog.Trigger>
 
-      <YStack gap="$4">
-        <H1
-          ta="center"
-          col="$color12"
-        >
-          Welcome to Tamagui.
-        </H1>
-        <Paragraph
-          col="$color10"
-          ta="center"
-        >
-          Here's a basic starter to show navigating from one screen to another.
-        </Paragraph>
-        <Separator />
-        <Paragraph ta="center">
-          This screen uses the same code on Next.js and React Native.
-        </Paragraph>
-        <Separator />
-      </YStack>
+        <AlertDialog.Portal>
+          <AlertDialog.Overlay
+            key="overlay"
+            animation="quick"
+            opacity={0.5}
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
+          <AlertDialog.Content
+            bordered
+            elevate
+            key="content"
+            animation={[
+              'quick',
+              {
+                opacity: {
+                  overshootClamping: true,
+                },
+              },
+            ]}
+            enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+            exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+            x={0}
+            scale={1}
+            opacity={1}
+            y={0}
+          >
+            <YStack space>
+              <AlertDialog.Title>Accept</AlertDialog.Title>
+              <AlertDialog.Description>
+                By pressing yes, you accept our terms and conditions.
+              </AlertDialog.Description>
 
-      <Button {...linkProps}>Link to user</Button>
-
-      <SheetDemo />
+              <XStack gap="$3" justifyContent="flex-end">
+                <AlertDialog.Cancel asChild>
+                  <Button>Cancel</Button>
+                </AlertDialog.Cancel>
+                <AlertDialog.Action asChild>
+                  <Button theme="active">Accept</Button>
+                </AlertDialog.Action>
+              </XStack>
+            </YStack>
+          </AlertDialog.Content>
+        </AlertDialog.Portal>
+      </AlertDialog>
     </YStack>
   )
 }
@@ -99,25 +98,12 @@ function SheetDemo() {
         onPositionChange={setPosition}
         dismissOnSnapToBottom
       >
-        <Sheet.Overlay
-          animation="lazy"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
-        />
+        <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
         <Sheet.Handle bg="$gray8" />
-        <Sheet.Frame
-          ai="center"
-          jc="center"
-          gap="$10"
-          bg="$color2"
-        >
+        <Sheet.Frame ai="center" jc="center" gap="$10" bg="$color2">
           <XStack gap="$2">
             <Paragraph ta="center">Made by</Paragraph>
-            <Anchor
-              col="$blue10"
-              href="https://twitter.com/natebirdman"
-              target="_blank"
-            >
+            <Anchor col="$blue10" href="https://twitter.com/natebirdman" target="_blank">
               @natebirdman,
             </Anchor>
             <Anchor
